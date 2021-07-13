@@ -2,6 +2,7 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Card from "react-bootstrap/Card";
+import { withAuth0 } from "@auth0/auth0-react";
 
 import "./BestBooks.css";
 import axios from "axios";
@@ -17,11 +18,11 @@ class MyFavoriteBooks extends React.Component {
     };
   }
   // 12
-  async componentDidMount() {
+  componentDidMount = async () => {
     // console.log("hello");
 
     let response = await axios.get(
-      `http://localhost:3002/books?email=mohammadatta97@gmail.com`
+      `http://localhost:3002/books?email=${this.props.auth0.user.email}`
     );
 
     console.log(response.data);
@@ -29,7 +30,7 @@ class MyFavoriteBooks extends React.Component {
     this.setState({
       userData: response.data,
     });
-  }
+  };
 
   // /////////////////////////////////////////////
 
@@ -71,4 +72,4 @@ class MyFavoriteBooks extends React.Component {
   }
 }
 
-export default MyFavoriteBooks;
+export default withAuth0(MyFavoriteBooks);
