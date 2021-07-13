@@ -37,6 +37,7 @@ class App extends React.Component {
     });
   };
 
+  // Add New Book (function)
   addBook = async (event) => {
     event.preventDefault();
     // obj to send the data in it (link)
@@ -55,6 +56,22 @@ class App extends React.Component {
     console.log(newResponse.data);
     this.setState({
       userData: newResponse.data,
+    });
+  };
+
+  // Delete Selected Book (function)
+  deleteBook = async (index) => {
+    let paramsObj = {
+      email: this.props.auth0.user.email,
+    };
+
+    const response = await axios.delete(
+      `http://localhost:3002/deletebook/${index}`,
+      { params: paramsObj }
+    );
+    // console.log(response);
+    this.setState({
+      userData: response.data,
     });
   };
 
@@ -91,6 +108,7 @@ class App extends React.Component {
                 <BestBooks
                   showModel={this.showModel}
                   userData={this.state.userData}
+                  deleteBook={this.deleteBook}
                 />
               ) : (
                 <Login />

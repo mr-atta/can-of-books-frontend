@@ -46,13 +46,13 @@ class MyFavoriteBooks extends React.Component {
           <h1>My Favorite Books</h1>
           <p>This is a collection of my favorite books</p>
 
-          {this.props.userData.map((element, i) => {
+          {this.props.userData.map((element, index) => {
             return (
-              <div key={i}>
+              <div key={index} style={{ display: "inline-block" }}>
                 <Card
                   style={{
                     width: "20rem",
-                    display: "inline-block",
+                    // display: "inline-block",
                     margin: "30px",
                   }}
                 >
@@ -64,8 +64,14 @@ class MyFavoriteBooks extends React.Component {
                   <Card.Body>
                     <Card.Title>{element.name}</Card.Title>
                     <Card.Text>description: {element.description}</Card.Text>
-                    <Card.Text>By: {element.status}</Card.Text>
+                    <Card.Text> {element.states}</Card.Text>
                   </Card.Body>
+                  <Button
+                    variant="danger"
+                    onClick={() => this.props.deleteBook(index)}
+                  >
+                    Delete
+                  </Button>
                 </Card>
               </div>
             );
