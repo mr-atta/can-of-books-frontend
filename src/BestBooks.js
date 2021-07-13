@@ -6,43 +6,49 @@ import { withAuth0 } from "@auth0/auth0-react";
 
 import "./BestBooks.css";
 import axios from "axios";
+import Button from "react-bootstrap/Button";
 
 // import { element } from "prop-types";
 
 class MyFavoriteBooks extends React.Component {
   // 12
-  constructor(props) {
-    super(props);
-    this.state = {
-      userData: [],
-    };
-  }
-  // 12
-  componentDidMount = async () => {
-    // console.log("hello");
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     userData: [],
+  //   };
+  // }
+  // // lab 12
+  // componentDidMount = async () => {
+  //   // console.log("hello");
 
-    let response = await axios.get(
-      `http://localhost:3002/books?email=${this.props.auth0.user.email}`
-    );
+  //   let response = await axios.get(
+  //     `http://localhost:3002/books?email=${this.props.auth0.user.email}`
+  //   );
 
-    console.log(response.data);
+  //   console.log(response.data);
 
-    this.setState({
-      userData: response.data,
-    });
-  };
+  //   this.setState({
+  //     userData: response.data,
+  //   });
+  // };
 
   // /////////////////////////////////////////////
 
   render() {
     return (
       <>
+        <Button variant="dark" onClick={this.props.showModel}>
+          Add A Book
+        </Button>
+
         <Jumbotron>
           <h1>My Favorite Books</h1>
           <p>This is a collection of my favorite books</p>
-          {this.state.userData.map((element) => {
+
+          {this.props.userData.map((element, i) => {
             return (
-              <>
+              <div key={i}>
                 <Card
                   style={{
                     width: "20rem",
@@ -61,11 +67,10 @@ class MyFavoriteBooks extends React.Component {
                     <Card.Text>By: {element.status}</Card.Text>
                   </Card.Body>
                 </Card>
-              </>
+              </div>
             );
           })}
         </Jumbotron>
-
         {/* <div>{this.state.userData}</div> */}
       </>
     );

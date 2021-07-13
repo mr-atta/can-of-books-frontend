@@ -12,7 +12,7 @@ class Header extends React.Component {
   render() {
     // console.log(this.props);
     const isAuthenticated = this.props.auth0.isAuthenticated; //
-    console.log(isAuthenticated);
+    // console.log(isAuthenticated);
     return (
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
         <Navbar.Brand>My Favorite Books</Navbar.Brand>
