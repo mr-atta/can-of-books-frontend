@@ -13,7 +13,6 @@ import UpdateForm from "./componants/UpdateForm";
 // import { element } from "prop-types";
 
 class MyFavoriteBooks extends React.Component {
-  // 12
   constructor(props) {
     super(props);
     this.state = {
@@ -23,12 +22,13 @@ class MyFavoriteBooks extends React.Component {
       index: 0,
     };
   }
-  // lab 12
+  // added in lab 12
+  // Did Mount component
   componentDidMount = async () => {
     // console.log("hello");
 
     let response = await axios.get(
-      `http://localhost:3002/books?email=${this.props.auth0.user.email}`
+      `${process.env.REACT_APP_LOCAL_HOST}/books?email=${this.props.auth0.user.email}`
     );
 
     console.log(response.data);
@@ -37,18 +37,18 @@ class MyFavoriteBooks extends React.Component {
       userData: response.data,
     });
   };
-
+  // show Model
   showModel = () => {
     this.setState({
       show: true,
     });
   };
+  // hide Model
   hideModel = () => {
     this.setState({
       show: false,
     });
   };
-
   // Add New Book (function)
   addBook = async (event) => {
     event.preventDefault();
@@ -62,13 +62,13 @@ class MyFavoriteBooks extends React.Component {
     };
 
     const newResponse = await axios.post(
-      `http://localhost:3002/addbook`,
+      `${process.env.REACT_APP_LOCAL_HOST}/addbook`,
       newBookData
     );
     console.log(newResponse.data);
-    this.setState({
+    await this.setState({
       userData: newResponse.data,
-      // show: false,
+      show: false,
     });
   };
   // Delete Selected Book (function)
@@ -78,15 +78,15 @@ class MyFavoriteBooks extends React.Component {
     };
 
     const response = await axios.delete(
-      `http://localhost:3002/deletebook/${index}`,
+      `${process.env.REACT_APP_LOCAL_HOST}/deletebook/${index}`,
       { params: paramsObj }
     );
     // console.log(response);
-    this.setState({
+    await this.setState({
       userData: response.data,
     });
   };
-
+  // show the updated form
   showUpdateForm = (index) => {
     this.setState({
       showUpdate: true,
@@ -105,14 +105,16 @@ class MyFavoriteBooks extends React.Component {
       email: this.props.auth0.user.email,
     };
     const updetedResponse = await axios.put(
-      `http://localhost:3002/updatebook/${this.state.index}`,
+      `${process.env.REACT_APP_LOCAL_HOST}/updatebook/${this.state.index}`,
       updetedBookData
     );
     await this.setState({
       userData: updetedResponse.data,
+      showUpdate: false,
     });
     console.log(updetedResponse.data);
-    this.componentDidMount();
+
+    this.componentDidMount(); // call componentDidMount()
   };
 
   // render /////////////////////////////////////////////
