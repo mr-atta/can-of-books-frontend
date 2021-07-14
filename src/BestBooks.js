@@ -8,6 +8,7 @@ import "./BestBooks.css";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import AddBookModel from "./componants/AddBookModel";
+import UpdateForm from "./componants/UpdateForm";
 
 // import { element } from "prop-types";
 
@@ -18,6 +19,8 @@ class MyFavoriteBooks extends React.Component {
     this.state = {
       show: false,
       userData: [],
+      showUpdate: false,
+      index: 0,
     };
   }
   // lab 12
@@ -65,6 +68,7 @@ class MyFavoriteBooks extends React.Component {
     console.log(newResponse.data);
     this.setState({
       userData: newResponse.data,
+      // show: false,
     });
   };
   // Delete Selected Book (function)
@@ -83,24 +87,63 @@ class MyFavoriteBooks extends React.Component {
     });
   };
 
+  showUpdateForm = (index) => {
+    this.setState({
+      showUpdate: true,
+      index: index,
+    });
+  };
+  // update book function
+  updateBook = async (event) => {
+    event.preventDefault();
+
+    const updetedBookData = {
+      bookName: event.target.bookName.value,
+      description: event.target.description.value,
+      imgUrl: event.target.imgUrl.value,
+      state: event.target.state.value,
+      email: this.props.auth0.user.email,
+    };
+    const updetedResponse = await axios.put(
+      `http://localhost:3002/updatebook/${this.state.index}`,
+      updetedBookData
+    );
+    await this.setState({
+      userData: updetedResponse.data,
+    });
+    console.log(updetedResponse.data);
+    this.componentDidMount();
+  };
+
   // render /////////////////////////////////////////////
   render() {
     return (
       <>
-        <AddBookModel
-          showModel={this.showModel}
-          hideModel={this.hideModel}
-          addBook={this.addBook}
-          show={this.state.show}
-        />
-
-        <Button variant="dark" onClick={this.showModel}>
-          Add A Book
-        </Button>
-
         <Jumbotron>
           <h1>My Favorite Books</h1>
           <p>This is a collection of my favorite books</p>
+
+          <AddBookModel
+            showModel={this.showModel}
+            hideModel={this.hideModel}
+            addBook={this.addBook}
+            show={this.state.show}
+          />
+
+          <Button
+            variant="dark"
+            onClick={this.showModel}
+            style={{ position: "absolute", top: "150px", left: "560px" }}
+          >
+            Add A Book
+          </Button>
+          {this.state.showUpdate && (
+            <UpdateForm
+              index={this.state.index}
+              userData={this.state.userData}
+              updateBook={this.updateBook}
+            />
+          )}
 
           {this.state.userData.map((element, index) => {
             return (
@@ -128,12 +171,19 @@ class MyFavoriteBooks extends React.Component {
                   >
                     Delete
                   </Button>
+                  <Button
+                    variant="success"
+                    onClick={() => this.showUpdateForm(index)}
+                  >
+                    Update
+                  </Button>
                 </Card>
               </div>
             );
           })}
+
+          {/* <div>{this.state.userData}</div> */}
         </Jumbotron>
-        {/* <div>{this.state.userData}</div> */}
       </>
     );
   }
